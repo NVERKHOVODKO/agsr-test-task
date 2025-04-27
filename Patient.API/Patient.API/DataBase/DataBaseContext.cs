@@ -32,14 +32,12 @@ public class DataBaseContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Настройка связи "Пациент 1-1 Имя"
         modelBuilder.Entity<Models.Patient>()
             .HasOne(p => p.Name)
             .WithOne(n => n.Patient)
             .HasForeignKey<PatientName>(n => n.PatientId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Настройка связи "Имя 1-Н Собственные имена"
         modelBuilder.Entity<PatientName>()
             .HasMany(n => n.Given)
             .WithOne(g => g.PatientName)

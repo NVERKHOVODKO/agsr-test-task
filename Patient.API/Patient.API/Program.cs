@@ -4,7 +4,9 @@ using Patient.API.DataBase;
 using Patient.API.Repositories;
 using Patient.API.Repositories.Interfaces;
 using System.Reflection;
+using AutoMapper;
 using Patient.API.Middlewares;
+using Patient.API.Profiles;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
@@ -18,6 +20,7 @@ builder.Services.AddDbContext<DataBaseContext>(options =>
 });
 
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddAutoMapper(typeof(PatientProfile));
 
 #region Logs
 
