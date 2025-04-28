@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patient.API", "Patient.API\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataGenerator", "DataGenerator\DataGenerator.csproj", "{CAD50621-7659-4F2D-948C-2D9A8B98B1AC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Patient.Core", "Patient.Core\Patient.Core.csproj", "{41282EC8-9828-466A-B15C-E86FAA2CDD66}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{CAD50621-7659-4F2D-948C-2D9A8B98B1AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAD50621-7659-4F2D-948C-2D9A8B98B1AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAD50621-7659-4F2D-948C-2D9A8B98B1AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41282EC8-9828-466A-B15C-E86FAA2CDD66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41282EC8-9828-466A-B15C-E86FAA2CDD66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41282EC8-9828-466A-B15C-E86FAA2CDD66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41282EC8-9828-466A-B15C-E86FAA2CDD66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
