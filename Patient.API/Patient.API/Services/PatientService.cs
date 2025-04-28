@@ -1,3 +1,5 @@
+using AutoMapper;
+using Patient.API.DTOs;
 using Patient.API.Exceptions;
 using Patient.API.Repositories.Interfaces;
 using Patient.API.Services.Interfaces;
@@ -7,23 +9,28 @@ namespace Patient.API.Services;
 public class PatientService : IPatientService
 {
     private readonly IPatientRepository _patientRepository;
+    private readonly IMapper _mapper;
 
-    public PatientService(IPatientRepository patientRepository)
+    public PatientService(IPatientRepository patientRepository, IMapper mapper)
     {
         _patientRepository = patientRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<Models.Patient>> GetAllAsync()
+    public async Task<IEnumerable<GetPatientDto>> GetAllAsync()
     {
-        return await _patientRepository.GetAllAsync();
+        var models = await _patientRepository.GetAllAsync();
+        return _mapper.Map<List<GetPatientDto>>(models);
     }
 
-    public async Task<Models.Patient?> GetByIdAsync(Guid id)
+    public async Task<GetPatientDto?> GetByIdAsync(Guid id)
     {
-        return await _patientRepository.GetByIdAsync(id);
+        var model = await _patientRepository.GetByIdAsync(id);
+        var patient = _mapper.Map<GetPatientDto>(model);
+        return patient;
     }
 
-    public async Task<Models.Patient> CreateAsync(Models.Patient patient)
+    public async Task<GetPatientDto> CreateAsync(CreatePatientDto patient)
     {
         if (string.IsNullOrEmpty(patient.Name.Family))
             throw new BadRequestException("Family name is required.");
@@ -31,14 +38,16 @@ public class PatientService : IPatientService
         if (patient.BirthDate == default)
             throw new BadRequestException("Birth date is required.");
 
-        patient.Id = Guid.NewGuid();
-        patient.Name.Id = Guid.NewGuid();
+        var model = _mapper.Map<Models.Patient>(patient);
+        model.Id = Guid.NewGuid();
+        model.Name.Id = Guid.NewGuid();
 
-        await _patientRepository.AddAsync(patient);
-        return patient;
+        await _patientRepository.AddAsync(model);
+
+        return _mapper.Map<GetPatientDto>(model);
     }
 
-    public async Task UpdateAsync(Guid id, Models.Patient patient)
+    public async Task UpdateAsync(Guid id, UpdatePatientDto patient)
     {
         if (id != patient.Id)
             throw new BadRequestException("ID in URL does not match patient ID.");
@@ -46,7 +55,9 @@ public class PatientService : IPatientService
         if (!await IsExistsAsync(id))
             throw new NotFoundException($"Patient with ID {id} not found.");
 
-        await _patientRepository.UpdateAsync(id, patient);
+        var model = _mapper.Map<Models.Patient>(patient);
+
+        await _patientRepository.UpdateAsync(id, model);
     }
 
     public async Task DeleteAsync(Guid id)
@@ -57,8 +68,5 @@ public class PatientService : IPatientService
         await _patientRepository.DeleteAsync(id);
     }
 
-    private async Task<bool> IsExistsAsync(Guid id)
-    {
-        return await _patientRepository.IsExists(id);
-    }
+    private async Task<bool> IsExistsAsync(Guid id) => await _patientRepository.IsExists(id);
 }

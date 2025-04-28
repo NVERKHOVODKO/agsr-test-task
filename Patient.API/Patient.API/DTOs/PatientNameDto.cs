@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Patient.API.DTOs;
 
-// <summary>
+/// <summary>
 /// DTO для имени пациента
 /// </summary>
 public class PatientNameDto

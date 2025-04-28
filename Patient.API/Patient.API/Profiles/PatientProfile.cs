@@ -33,5 +33,9 @@ public class PatientProfile : Profile
                 }).ToList()
             }))
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+        
+        CreateMap<Models.Patient, GetPatientDto>();
+        CreateMap<PatientName, PatientNameDto>()
+            .ForMember(dest => dest.Given, opt => opt.MapFrom(src => src.Given.Select(g => g.Value)));
     }
 }

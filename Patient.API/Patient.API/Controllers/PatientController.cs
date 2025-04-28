@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Patient.API.DTOs;
 using Patient.API.Services.Interfaces;
 
 namespace Patient.API.Controllers;
@@ -15,31 +16,31 @@ public class PatientsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Models.Patient>>> GetAll()
+    public async Task<ActionResult<IEnumerable<GetPatientDto>>> GetAll()
     {
         var patients = await _patientService.GetAllAsync();
         return Ok(patients);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Models.Patient>> Get(Guid id)
+    public async Task<ActionResult<GetPatientDto>> Get(Guid id)
     {
         var patient = await _patientService.GetByIdAsync(id);
-        return patient == null ? NotFound() : Ok(patient);
+        return patient is null ? NotFound() : Ok(patient);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(Guid id, Models.Patient patient)
+    public async Task<IActionResult> Put(Guid id, UpdatePatientDto patient)
     {
         await _patientService.UpdateAsync(id, patient);
-        return NoContent();
+        return Ok();
     }
 
     [HttpPost]
-    public async Task<ActionResult<Models.Patient>> Post(Models.Patient patient)
+    public async Task<ActionResult<GetPatientDto>> Post(CreatePatientDto patient)
     {
         var createdPatient = await _patientService.CreateAsync(patient);
-        return CreatedAtAction("Get", new { id = createdPatient.Id }, createdPatient);
+        return Ok(createdPatient);
     }
 
     [HttpDelete("{id}")]

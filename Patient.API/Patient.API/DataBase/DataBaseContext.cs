@@ -16,7 +16,7 @@ public class DataBaseContext : DbContext
     /// <summary>
     /// Пациенты.
     /// </summary>
-    public DbSet<Models.Patient> Patients { get; set; } = null!;
+    public DbSet<Models.Patient?> Patients { get; set; } = null!;
 
     /// <summary>
     /// Имена пациентов.

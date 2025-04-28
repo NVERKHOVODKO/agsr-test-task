@@ -4,22 +4,31 @@ using Patient.API.DataBase;
 using Patient.API.Repositories;
 using Patient.API.Repositories.Interfaces;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using AutoMapper;
 using Patient.API.Middlewares;
 using Patient.API.Profiles;
+using Patient.API.Services;
+using Patient.API.Services.Interfaces;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.WriteIndented = true;
+    });
 builder.Services.AddDbContext<DataBaseContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
 });
 
 builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddAutoMapper(typeof(PatientProfile));
 
 #region Logs

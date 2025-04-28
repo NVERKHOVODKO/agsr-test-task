@@ -18,17 +18,19 @@ public class PatientRepository : IPatientRepository
     {
         return await _context.Patients
             .Include(p => p.Name)
+            .ThenInclude(p => p.Given)
             .ToListAsync();
     }
 
-    public async Task<Models.Patient> GetByIdAsync(Guid id)
+    public async Task<Models.Patient?> GetByIdAsync(Guid id)
     {
         return await _context.Patients
             .Include(p => p.Name)
+            .ThenInclude(p => p.Given)
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task AddAsync(Models.Patient patient)
+    public async Task AddAsync(Models.Patient? patient)
     {
         await _context.Patients.AddAsync(patient);
         await _context.SaveChangesAsync();
