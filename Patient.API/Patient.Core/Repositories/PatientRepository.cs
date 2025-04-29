@@ -21,7 +21,7 @@ public class PatientRepository : IRepository<Models.Patient>
             .ToListAsync();
     }
 
-    public async Task<Models.Patient> GetByIdAsync(Guid id)
+    public async Task<Models.Patient?> GetByIdAsync(Guid id)
     {
         return await _context.Patients
             .Include(p => p.Name)

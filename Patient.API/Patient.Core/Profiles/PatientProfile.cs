@@ -10,32 +10,48 @@ public class PatientProfile : Profile
     {
         CreateMap<CreatePatientDto, Core.Models.Patient>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()))
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => new PatientName
+            .ForMember(dest => dest.Name, opt => 
             {
-                Id = Guid.NewGuid(),
-                Use = src.Name.Use,
-                Family = src.Name.Family,
-                Given = src.Name.Given.Select(g => new PatientGivenName
+                opt.PreCondition(src => src.Name is not null);
+                opt.MapFrom(src => new PatientName
                 {
                     Id = Guid.NewGuid(),
-                    Value = g
-                }).ToList()
-            }));
+                    Use = src.Name!.Use,
+                    Family = src.Name!.Family ?? string.Empty,
+                    Given = src.Name!.Given
+                        .Select(g => new PatientGivenName
+                        {
+                            Id = Guid.NewGuid(),
+                            Value = g
+                        })
+                        .ToList()
+                });
+            });
 
         CreateMap<UpdatePatientDto, Core.Models.Patient>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => new PatientName
+            .ForMember(dest => dest.Name, opt => 
             {
-                Use = src.Name.Use,
-                Family = src.Name.Family,
-                Given = src.Name.Given.Select(g => new PatientGivenName
+                opt.PreCondition(src => src.Name != null);
+                opt.MapFrom(src => new PatientName
                 {
-                    Value = g
-                }).ToList()
-            }))
-            .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+                    Use = src.Name!.Use,
+                    Family = src.Name!.Family ?? string.Empty,
+                    Given = src.Name!.Given
+                        .Select(g => new PatientGivenName
+                        {
+                            Value = g
+                        })
+                        .ToList()
+                });
+            })
+            .ForAllMembers(opts => opts.Condition((srcMember) => srcMember is not null));
         
         CreateMap<Core.Models.Patient, GetPatientDto>();
+        
         CreateMap<PatientName, PatientNameDto>()
-            .ForMember(dest => dest.Given, opt => opt.MapFrom(src => src.Given.Select(g => g.Value)));
+            .ForMember(dest => dest.Given, opt => 
+            {
+                opt.MapFrom(src => src.Given.Select(g => g.Value));
+            });
     }
 }

@@ -12,7 +12,7 @@ public class CreatePatientDto
     /// Complete name information of the patient.
     /// </summary>
     [Required]
-    public PatientNameDto Name { get; set; }
+    public PatientNameDto? Name { get; set; }
 
     /// <summary>
     /// Biological gender of the patient.

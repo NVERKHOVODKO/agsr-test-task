@@ -1,7 +1,6 @@
 using AutoMapper;
 using Patient.Core.DTOs;
 using Patient.Core.Exceptions;
-using Patient.Core.Repositories;
 using Patient.Core.Repositories.Interfaces;
 using Patient.Core.Services.Interfaces;
 
@@ -33,7 +32,7 @@ public class PatientService : IPatientService
 
     public async Task<GetPatientDto> CreateAsync(CreatePatientDto patient)
     {
-        if (string.IsNullOrEmpty(patient.Name.Family))
+        if (string.IsNullOrEmpty(patient.Name?.Family))
             throw new BadRequestException("Family name is required.");
 
         if (patient.BirthDate == default)
