@@ -25,6 +25,23 @@ public static class Program
     {
         var builder = CreateWebApplicationBuilder(args);
         var app = BuildApplication(builder);
+        app.Lifetime.ApplicationStarted.Register(() =>
+        {
+            var provider = app.Services.GetRequiredService<Microsoft.AspNetCore.Mvc.ApiExplorer.IApiDescriptionGroupCollectionProvider>();
+            var swaggerGen = app.Services.GetRequiredService<Swashbuckle.AspNetCore.Swagger.ISwaggerProvider>();
+            var swagger = swaggerGen.GetSwagger("v1");
+
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "swagger.json");
+            using var fileStream = File.Create(filePath);
+            using var writer = new StreamWriter(fileStream);
+            var json = System.Text.Json.JsonSerializer.Serialize(swagger, new System.Text.Json.JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+            writer.Write(json);
+        });
+        app.UseSwagger();
+        app.UseSwaggerUI();
         app.Run();
     }
 
@@ -117,6 +134,7 @@ public static class Program
     private static WebApplication BuildApplication(WebApplicationBuilder builder)
     {
         var app = builder.Build();
+        app.Urls.Add("http://0.0.0.0:7272");
 
         app.UseMiddleware<ExceptionMiddleware>();
         EnsureDatabaseCreated(app);

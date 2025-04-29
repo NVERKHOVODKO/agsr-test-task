@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  patient.api:
+    build:
+      context: .
+      dockerfile: Patient.API.Dockerfile
+    ports:
+      - "7272:7272"
+    networks:
+      - patient-network
+
+  data.generator:
+    build:
+      context: .
+      dockerfile: DataGenerator.Dockerfile
+    depends_on:
+      - patient.api
+    environment:
+        - ApiBaseUrl=http://patient.api:7272/api/patients
+    networks:
+      - patient-network
+
+networks:
+  patient-network:
+    driver: bridge

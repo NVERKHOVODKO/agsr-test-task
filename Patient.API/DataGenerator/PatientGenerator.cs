@@ -8,42 +8,20 @@ namespace DataGenerator;
 public class PatientGenerator
 {
     private readonly HttpClient _httpClient;
+    private readonly string? _apiBaseUrl;
     private readonly ILogger<PatientGenerator> _logger;
     private readonly Random _random = new();
-    private const string ApiBaseUrl = "https://localhost:7272/api/patients";
     private const int DelayBetweenRequestsMs = 100;
     private const int MinAgeYears = 18;
     private const int MaxAgeYears = 90;
     private const double ActivePatientProbability = 0.8;
     private const int PatientCount = 100;
 
-    private static readonly string[] FirstNames = 
-    {
-        "James", "Mary", "John", "Patricia", "Robert", "Jennifer",
-        "Michael", "Linda", "William", "Elizabeth", "David", "Barbara",
-        "Richard", "Susan", "Joseph", "Jessica", "Thomas", "Sarah",
-        "Charles", "Karen", "Christopher", "Nancy", "Daniel", "Lisa",
-        "Matthew", "Betty", "Anthony", "Margaret", "Donald", "Sandra"
-    };
-
-    private static readonly string[] LastNames = 
-    {
-        "Smith", "Johnson", "Williams", "Brown", "Jones", "Miller",
-        "Davis", "Garcia", "Rodriguez", "Wilson", "Martinez", "Anderson",
-        "Taylor", "Thomas", "Hernandez", "Moore", "Martin", "Jackson",
-        "Thompson", "White", "Lopez", "Lee", "Gonzalez", "Harris",
-        "Clark", "Lewis", "Robinson", "Walker", "Perez", "Hall"
-    };
-
-    private static readonly string[] NameUses = 
-    { 
-        "official", "usual", "nickname", "anonymous", "old", "maiden" 
-    };
-
-    public PatientGenerator(HttpClient httpClient, ILogger<PatientGenerator> logger)
+    public PatientGenerator(HttpClient httpClient, ILogger<PatientGenerator> logger, string? apiBaseUrl)
     {
         _httpClient = httpClient;
         _logger = logger;
+        _apiBaseUrl = apiBaseUrl;
     }
 
     public async Task<int> GeneratePatientsAsync()
@@ -116,7 +94,7 @@ public class PatientGenerator
 
     private string? GetRandomNameUse()
     {
-        return _random.Next(2) == 0 ? null : NameUses[_random.Next(NameUses.Length)];
+        return _random.Next(2) == 0 ? null : PatientData.NameUses[_random.Next(PatientData.NameUses.Length)];
     }
 
     private Gender GetRandomGender()
@@ -141,18 +119,18 @@ public class PatientGenerator
         
         while (givenNames.Count < nameCount)
         {
-            givenNames.Add(FirstNames[_random.Next(FirstNames.Length)]);
+            givenNames.Add(PatientData.FirstNames[_random.Next(PatientData.FirstNames.Length)]);
         }
         
         return givenNames.ToList();
     }
 
-    private string GetRandomLastName() => LastNames[_random.Next(LastNames.Length)];
+    private string GetRandomLastName() => PatientData.LastNames[_random.Next(PatientData.LastNames.Length)];
 
     private async Task<HttpResponseMessage> CreatePatientAsync(CreatePatientDto patient)
     {
         using var content = JsonContent.Create(patient);
         
-        return await _httpClient.PostAsync(ApiBaseUrl, content);
+        return await _httpClient.PostAsync(_apiBaseUrl, content);
     }
 }
