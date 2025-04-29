@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Patient.Core.Constants;
 using Patient.Core.DataBase;
 using Patient.Core.Repositories.Interfaces;
 
@@ -51,5 +52,26 @@ public class PatientRepository : IRepository<Models.Patient>
     public async Task<bool> IsExists(Guid id)
     {
         return await _context.Patients.AnyAsync(p => p.Id == id);
+    }
+    
+    public async Task<List<Models.Patient?>> SearchByBirthDateAsync(DateTime? startDate, DateTime? endDate, string prefix)
+    {
+        var query = _context.Patients.AsQueryable();
+
+        if (prefix == DateConstants.NotEqualPrefix)
+        {
+            if (startDate == endDate && startDate.HasValue)
+                query = query.Where(p => p != null && p.BirthDate !=  startDate.Value.Date);
+        }
+        else
+        {
+            if (startDate.HasValue)
+                query = query.Where(p => p != null && p.BirthDate >= startDate.Value);
+        
+            if (endDate.HasValue)
+                query = query.Where(p => p != null && p.BirthDate <= endDate.Value);
+        }
+        
+        return await query.ToListAsync();
     }
 }

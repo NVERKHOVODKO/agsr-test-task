@@ -13,4 +13,6 @@ public interface IPatientService
     Task UpdateAsync(Guid id, UpdatePatientDto patient);
 
     Task DeleteAsync(Guid id);
+
+    Task<IEnumerable<GetPatientDto>> SearchByBirthDateAsync(string fhirDateParam);
 }

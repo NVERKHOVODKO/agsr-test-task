@@ -1,6 +1,8 @@
+using System.Globalization;
 using AutoMapper;
 using Patient.Core.DTOs;
 using Patient.Core.Exceptions;
+using Patient.Core.Helpers.Interfaces;
 using Patient.Core.Repositories.Interfaces;
 using Patient.Core.Services.Interfaces;
 
@@ -10,11 +12,16 @@ public class PatientService : IPatientService
 {
     private readonly IRepository<Models.Patient> _patientRepository;
     private readonly IMapper _mapper;
+    private readonly IDataHelper _dataHelper;
 
-    public PatientService(IRepository<Models.Patient> patientRepository, IMapper mapper)
+    public PatientService(
+        IRepository<Models.Patient> patientRepository, 
+        IMapper mapper,
+        IDataHelper dataHelper)
     {
         _patientRepository = patientRepository;
         _mapper = mapper;
+        _dataHelper = dataHelper;
     }
 
     public async Task<IEnumerable<GetPatientDto>> GetAllAsync()
@@ -69,4 +76,14 @@ public class PatientService : IPatientService
     }
 
     private async Task<bool> IsExistsAsync(Guid id) => await _patientRepository.IsExists(id);
+    
+    public async Task<IEnumerable<GetPatientDto>> SearchByBirthDateAsync(string dateParam)
+    {
+        var (prefix, dateTime) = _dataHelper.ParseFhirDateParameter(dateParam);
+        var (startDate, endDate) = _dataHelper.CalculateDateRange(prefix, dateTime);
+        
+        var patients = await _patientRepository.SearchByBirthDateAsync(startDate, endDate, prefix);
+        
+        return _mapper.Map<IEnumerable<GetPatientDto>>(patients);
+    }
 }

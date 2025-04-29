@@ -4,6 +4,8 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Patient.Core.DataBase;
+using Patient.Core.Helpers;
+using Patient.Core.Helpers.Interfaces;
 using Patient.Core.Middlewares;
 using Patient.Core.Profiles;
 using Patient.Core.Repositories;
@@ -36,7 +38,8 @@ internal abstract class Program
         builder.Services.AddScoped<IRepository<Core.Models.Patient>, PatientRepository>();
         builder.Services.AddScoped<IPatientService, PatientService>();
         builder.Services.AddAutoMapper(typeof(PatientProfile));
-
+        builder.Services.AddScoped<IDataHelper, DataHelper>();
+        
         #region Logs
 
         var logsDirectory = Path.Combine("Logs");

@@ -82,4 +82,26 @@ public class PatientsController : ControllerBase
         await _patientService.DeleteAsync(id);
         return NoContent();
     }
+    
+    /// <summary>
+    /// Searches patients by birthdate using FHIR date search parameters
+    /// </summary>
+    /// <param name="date" example="eq2013-01-14">FHIR date search parameter with optional prefix:
+    /// <br/>- eq = equal (default)
+    /// <br/>- ne = not equal
+    /// <br/>- lt = less than
+    /// <br/>- gt = greater than
+    /// <br/>- le = less or equal
+    /// <br/>- ge = greater or equal
+    /// <br/>- sa = starts after
+    /// <br/>- eb = ends before
+    /// <br/>- ap = approximately
+    /// </param>
+    /// <returns>List of patients matching the date criteria</returns>
+    [HttpGet("search")]
+    public async Task<ActionResult<IEnumerable<GetPatientDto>>> SearchByBirthDate([FromQuery] string date)
+    {
+        var patients = await _patientService.SearchByBirthDateAsync(date);
+        return Ok(patients);
+    }
 }
