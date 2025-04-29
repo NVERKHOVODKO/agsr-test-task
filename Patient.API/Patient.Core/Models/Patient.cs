@@ -6,14 +6,8 @@ namespace Patient.Core.Models;
 /// <summary>
 /// Patient registered in the hospital system.
 /// </summary>
-public class Patient
+public class Patient : BaseModel
 {
-    /// <summary>
-    /// Unique identifier of the patient.
-    /// </summary>
-    [Key]
-    public Guid Id { get; set; } = Guid.NewGuid();
-
     /// <summary>
     /// Navigation property for patient's name information.
     /// </summary>

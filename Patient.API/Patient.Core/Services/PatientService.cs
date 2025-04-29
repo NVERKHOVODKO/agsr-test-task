@@ -1,6 +1,7 @@
 using AutoMapper;
 using Patient.Core.DTOs;
 using Patient.Core.Exceptions;
+using Patient.Core.Repositories;
 using Patient.Core.Repositories.Interfaces;
 using Patient.Core.Services.Interfaces;
 
@@ -8,10 +9,10 @@ namespace Patient.Core.Services;
 
 public class PatientService : IPatientService
 {
-    private readonly IPatientRepository _patientRepository;
+    private readonly IRepository<Models.Patient> _patientRepository;
     private readonly IMapper _mapper;
 
-    public PatientService(IPatientRepository patientRepository, IMapper mapper)
+    public PatientService(IRepository<Models.Patient> patientRepository, IMapper mapper)
     {
         _patientRepository = patientRepository;
         _mapper = mapper;

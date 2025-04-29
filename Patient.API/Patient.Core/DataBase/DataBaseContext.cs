@@ -10,7 +10,7 @@ public class DataBaseContext : DbContext
     {
     }
 
-    public DbSet<Models.Patient> Patients { get; set; } = null!;
+    public DbSet<Models.Patient?> Patients { get; set; } = null!;
 
     public DbSet<PatientName> PatientNames { get; set; } = null!;
 

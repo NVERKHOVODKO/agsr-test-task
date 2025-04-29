@@ -3,9 +3,8 @@ using Patient.Core.DataBase;
 using Patient.Core.Repositories.Interfaces;
 
 namespace Patient.Core.Repositories;
-
-/*[AutoInterface]*/
-public class PatientRepository : IPatientRepository
+ 
+public class PatientRepository : IRepository<Models.Patient>
 {
     private readonly DataBaseContext _context;
 
@@ -22,7 +21,7 @@ public class PatientRepository : IPatientRepository
             .ToListAsync();
     }
 
-    public async Task<Core.Models.Patient?> GetByIdAsync(Guid id)
+    public async Task<Models.Patient> GetByIdAsync(Guid id)
     {
         return await _context.Patients
             .Include(p => p.Name)

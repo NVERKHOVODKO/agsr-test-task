@@ -33,7 +33,7 @@ internal abstract class Program
             options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
         });
 
-        builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+        builder.Services.AddScoped<IRepository<Core.Models.Patient>, PatientRepository>();
         builder.Services.AddScoped<IPatientService, PatientService>();
         builder.Services.AddAutoMapper(typeof(PatientProfile));
 
