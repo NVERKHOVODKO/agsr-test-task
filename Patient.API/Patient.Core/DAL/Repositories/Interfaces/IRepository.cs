@@ -1,6 +1,6 @@
-using Patient.Core.Models;
+using Patient.Core.DAL.Models;
 
-namespace Patient.Core.Repositories.Interfaces;
+namespace Patient.Core.DAL.Repositories.Interfaces;
 
 public interface IRepository<T> where T : BaseModel
 {

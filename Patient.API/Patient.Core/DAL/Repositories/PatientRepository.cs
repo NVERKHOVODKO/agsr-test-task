@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Patient.Core.Constants;
-using Patient.Core.DataBase;
-using Patient.Core.Repositories.Interfaces;
+using Patient.Core.DAL.Context;
+using Patient.Core.DAL.Repositories.Interfaces;
 
-namespace Patient.Core.Repositories;
+namespace Patient.Core.DAL.Repositories;
  
 public class PatientRepository : IRepository<Models.Patient>
 {
@@ -14,7 +14,7 @@ public class PatientRepository : IRepository<Models.Patient>
         _context = context;
     }
 
-    public async Task<IEnumerable<Core.Models.Patient>> GetAllAsync()
+    public async Task<IEnumerable<Models.Patient>> GetAllAsync()
     {
         return await _context.Patients
             .Include(p => p.Name)
@@ -30,13 +30,13 @@ public class PatientRepository : IRepository<Models.Patient>
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task AddAsync(Core.Models.Patient patient)
+    public async Task AddAsync(Models.Patient patient)
     {
         await _context.Patients.AddAsync(patient);
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Core.Models.Patient patient)
+    public async Task UpdateAsync(Models.Patient patient)
     {
         _context.Entry(patient).State = EntityState.Modified;
         await _context.SaveChangesAsync();

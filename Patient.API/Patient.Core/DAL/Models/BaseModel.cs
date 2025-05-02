@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Patient.Core.Models;
+namespace Patient.Core.DAL.Models;
 
 public abstract class BaseModel
 {

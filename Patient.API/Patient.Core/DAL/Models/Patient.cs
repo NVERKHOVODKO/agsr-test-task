@@ -1,7 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using Patient.Core.Enums;
+using Patient.Core.Services.Patient.Enums;
 
-namespace Patient.Core.Models;
+namespace Patient.Core.DAL.Models;
 
 /// <summary>
 /// Patient registered in the hospital system.

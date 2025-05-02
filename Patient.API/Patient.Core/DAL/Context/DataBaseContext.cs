@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Patient.Core.Models;
+using Patient.Core.DAL.Models;
 
-namespace Patient.Core.DataBase;
+namespace Patient.Core.DAL.Context;
 
 public class DataBaseContext : DbContext
 {
@@ -10,7 +10,7 @@ public class DataBaseContext : DbContext
     {
     }
 
-    public DbSet<Models.Patient> Patients { get; set; }
+    public DbSet<DAL.Models.Patient> Patients { get; set; }
 
     public DbSet<PatientName> PatientNames { get; set; }
 
@@ -20,7 +20,7 @@ public class DataBaseContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Models.Patient>()
+        modelBuilder.Entity<DAL.Models.Patient>()
             .HasOne(p => p.Name)
             .WithOne(n => n.Patient)
             .HasForeignKey<PatientName>(n => n.PatientId)

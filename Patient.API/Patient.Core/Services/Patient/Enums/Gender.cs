@@ -1,4 +1,4 @@
-namespace Patient.Core.Enums;
+namespace Patient.Core.Services.Patient.Enums;
 
 /// <summary>
 /// Represents a patient's gender identity.

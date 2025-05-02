@@ -1,14 +1,13 @@
 using System.Globalization;
 using Patient.Core.Constants;
-using Patient.Core.Helpers.Interfaces;
 
 namespace Patient.Core.Helpers;
 
-public class DataHelper : IDataHelper
+public class DataHelper
 {
     private const int ApproximateRangeMonths = 1;
     
-    public (string prefix, DateTime dateTime) ParseFhirDateParameter(string fhirDateParam)
+    public (string Prefix, DateTime DateTime) ParseFhirDateParameter(string fhirDateParam)
     {
         if (string.IsNullOrEmpty(fhirDateParam))
             throw new ArgumentException("Date parameter is required");
@@ -42,28 +41,28 @@ public class DataHelper : IDataHelper
         return (prefix, parsedDate);
     }
 
-    public (DateTime? start, DateTime? end) CalculateDateRange(string prefix, DateTime date)
+    public (DateTime? Start, DateTime? End) CalculateDateRange(string prefix, DateTime date)
     {
         var (periodStart, periodEnd) = GetPeriodBounds(date);
 
         return prefix switch
         {
-            DateConstants.EqualPrefix => (periodStart, periodEnd),
-            DateConstants.NotEqualPrefix => (periodStart, periodStart),
-            DateConstants.LessThanPrefix => (null, periodStart),
-            DateConstants.LessOrEqualPrefix => (null, periodEnd),
-            DateConstants.GreaterThanPrefix => (periodEnd, null),
-            DateConstants.GreaterOrEqualPrefix => (periodStart, null),
-            DateConstants.StartsAfterPrefix => (periodEnd, null),
-            DateConstants.EndsBeforePrefix => (null, periodStart),
-            DateConstants.ApproximatelyPrefix => (
+            DatePrefix.Equal => (periodStart, periodEnd),
+            DatePrefix.NotEqual => (periodStart, periodStart),
+            DatePrefix.LessThan => (null, periodStart),
+            DatePrefix.LessOrEqual => (null, periodEnd),
+            DatePrefix.GreaterThan => (periodEnd, null),
+            DatePrefix.GreaterOrEqual => (periodStart, null),
+            DatePrefix.StartsAfter => (periodEnd, null),
+            DatePrefix.EndsBefore => (null, periodStart),
+            DatePrefix.Approximately => (
                 periodStart.AddMonths(-ApproximateRangeMonths),
                 periodEnd.AddMonths(ApproximateRangeMonths)),
             _ => (periodStart, periodEnd)
         };
     }
 
-    private (DateTime periodStart, DateTime periodEnd) GetPeriodBounds(DateTime date)
+    private (DateTime PeriodStart, DateTime PeriodEnd) GetPeriodBounds(DateTime date)
     {
         if (date.TimeOfDay != TimeSpan.Zero)
             return (date, date);

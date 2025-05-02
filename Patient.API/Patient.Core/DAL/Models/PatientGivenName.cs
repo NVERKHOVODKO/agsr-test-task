@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Patient.Core.Models;
+namespace Patient.Core.DAL.Models;
 
 /// <summary>
 /// Represents a given (first) name of a patient.

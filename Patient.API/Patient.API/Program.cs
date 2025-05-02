@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Patient.Core.DataBase;
-using Patient.Core.Profiles;
-using Patient.Core.Repositories;
 using Serilog;
 using System.Text.Json.Serialization;
 using AutoMapper;
+using Patient.Core.DAL.Context;
+using Patient.Core.DAL.Repositories;
+using Patient.Core.DAL.Repositories.Interfaces;
 using Patient.Core.Helpers;
-using Patient.Core.Repositories.Interfaces;
+using Patient.Core.Mappings;
 using Patient.Core.Services;
 using Patient.Core.Services.Interfaces;
 using Serilog.Formatting.Compact;
@@ -48,7 +48,7 @@ builder.Services.AddDbContext<DataBaseContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException()));
 
 // Register application services
-builder.Services.AddScoped<IRepository<Patient.Core.Models.Patient>, PatientRepository>();
+builder.Services.AddScoped<IRepository<Patient.Core.DAL.Models.Patient>, PatientRepository>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<DataHelper>();
 

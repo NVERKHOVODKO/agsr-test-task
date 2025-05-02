@@ -1,6 +1,6 @@
-using Patient.Core.Enums;
+using Patient.Core.Services.Patient.Enums;
 
-namespace Patient.Core.DTOs;
+namespace Patient.Core.Patient;
 
 /// <summary>
 /// Patient data transfer object for API responses.

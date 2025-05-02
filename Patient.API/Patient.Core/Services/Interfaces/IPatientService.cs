@@ -1,5 +1,5 @@
-using Patient.Core.DTOs;
 using Patient.Core.Enums;
+using Patient.Core.Patient;
 
 namespace Patient.Core.Services.Interfaces;
 

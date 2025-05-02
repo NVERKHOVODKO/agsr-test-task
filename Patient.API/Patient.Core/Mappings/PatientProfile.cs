@@ -1,14 +1,14 @@
 using AutoMapper;
-using Patient.Core.DTOs;
-using Patient.Core.Models;
+using Patient.Core.DAL.Models;
+using Patient.Core.Patient;
 
-namespace Patient.Core.Profiles;
+namespace Patient.Core.Mappings;
 
 public class PatientProfile : Profile
 {
     public PatientProfile()
     {
-        CreateMap<CreatePatientDto, Core.Models.Patient>()
+        CreateMap<CreatePatientDto, DAL.Models.Patient>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(_ => Guid.NewGuid()))
             .ForMember(dest => dest.Name, opt => 
             {
@@ -28,7 +28,7 @@ public class PatientProfile : Profile
                 });
             });
 
-        CreateMap<UpdatePatientDto, Core.Models.Patient>()
+        CreateMap<UpdatePatientDto, DAL.Models.Patient>()
             .ForMember(dest => dest.Name, opt => 
             {
                 opt.PreCondition(src => src.Name != null);
@@ -46,7 +46,7 @@ public class PatientProfile : Profile
             })
             .ForAllMembers(opts => opts.Condition((srcMember) => srcMember is not null));
         
-        CreateMap<Core.Models.Patient, GetPatientDto>();
+        CreateMap<DAL.Models.Patient, GetPatientDto>();
         
         CreateMap<PatientName, PatientNameDto>()
             .ForMember(dest => dest.Given, opt => 

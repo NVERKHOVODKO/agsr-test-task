@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Patient.Core.Enums;
+using Patient.Core.Services.Patient.Enums;
 
-namespace Patient.Core.DTOs;
+namespace Patient.Core.Patient;
 
 /// <summary>
 /// Data transfer object for creating a new patient record.
@@ -12,7 +12,7 @@ public class CreatePatientDto
     /// Complete name information of the patient.
     /// </summary>
     [Required]
-    public PatientNameDto? Name { get; set; }
+    public PatientNameDto Name { get; set; } = null!;
 
     /// <summary>
     /// Biological gender of the patient.

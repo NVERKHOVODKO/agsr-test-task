@@ -1,20 +1,20 @@
 using AutoMapper;
-using Patient.Core.DTOs;
+using Patient.Core.DAL.Repositories.Interfaces;
 using Patient.Core.Enums;
 using Patient.Core.Helpers;
-using Patient.Core.Repositories.Interfaces;
+using Patient.Core.Patient;
 using Patient.Core.Services.Interfaces;
 
 namespace Patient.Core.Services;
 
 public class PatientService : IPatientService
 {
-    private readonly IRepository<Core.Models.Patient> _patientRepository;
+    private readonly IRepository<DAL.Models.Patient> _patientRepository;
     private readonly IMapper _mapper;
     private readonly DataHelper _dataHelper;
 
     public PatientService(
-        IRepository<Core.Models.Patient> patientRepository, 
+        IRepository<DAL.Models.Patient> patientRepository, 
         IMapper mapper,
         DataHelper dataHelper)
     {
@@ -38,7 +38,7 @@ public class PatientService : IPatientService
 
     public async Task<GetPatientDto> CreateAsync(CreatePatientDto patient)
     {
-        var model = _mapper.Map<Core.Models.Patient>(patient);
+        var model = _mapper.Map<DAL.Models.Patient>(patient);
         await _patientRepository.AddAsync(model);
 
         return _mapper.Map<GetPatientDto>(model);
@@ -49,7 +49,7 @@ public class PatientService : IPatientService
        if (!await IsExistsAsync(id))
             return Status.NotFound;
 
-       var model = _mapper.Map<Core.Models.Patient>(patient);
+       var model = _mapper.Map<DAL.Models.Patient>(patient);
 
        await _patientRepository.UpdateAsync(model);
 
