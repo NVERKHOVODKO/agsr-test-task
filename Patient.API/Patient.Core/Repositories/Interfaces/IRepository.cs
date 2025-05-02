@@ -8,7 +8,7 @@ public interface IRepository<T> where T : BaseModel
 
     Task<T?> GetByIdAsync(Guid id);
 
-    Task AddAsync(T? model);
+    Task AddAsync(T model);
 
     Task UpdateAsync(Guid id, T model);
 
@@ -16,5 +16,5 @@ public interface IRepository<T> where T : BaseModel
 
     Task<bool> IsExists(Guid id);
 
-    Task<List<Models.Patient?>> SearchByBirthDateAsync(DateTime? startDate, DateTime? endDate, string prefix);
+    Task<List<Models.Patient>> SearchByBirthDateAsync(DateTime? startDate, DateTime? endDate, string prefix);
 }

@@ -1,4 +1,3 @@
-using System.Globalization;
 using AutoMapper;
 using Patient.Core.DTOs;
 using Patient.Core.Exceptions;

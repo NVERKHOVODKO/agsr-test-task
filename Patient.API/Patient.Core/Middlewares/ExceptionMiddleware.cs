@@ -76,11 +76,11 @@ public class ExceptionMiddleware
         
         await context.Response.WriteAsync(json);
     }
-}
 
-public class ErrorDetails
-{
-    public string Message { get; set; } = null!;
-    public string? Details { get; set; }
-    public object? AdditionalData { get; set; }
+    private class ErrorDetails
+    {
+        public string Message { get; set; } = null!;
+        public string? Details { get; set; }
+        public object? AdditionalData { get; set; }
+    }
 }
