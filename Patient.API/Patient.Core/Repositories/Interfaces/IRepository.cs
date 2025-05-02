@@ -10,7 +10,7 @@ public interface IRepository<T> where T : BaseModel
 
     Task AddAsync(T model);
 
-    Task UpdateAsync(Guid id, T model);
+    Task UpdateAsync(T model);
 
     Task DeleteAsync(Guid id);
 

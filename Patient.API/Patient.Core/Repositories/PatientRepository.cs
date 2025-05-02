@@ -36,7 +36,7 @@ public class PatientRepository : IRepository<Models.Patient>
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Guid id, Core.Models.Patient patient)
+    public async Task UpdateAsync(Core.Models.Patient patient)
     {
         _context.Entry(patient).State = EntityState.Modified;
         await _context.SaveChangesAsync();

@@ -63,7 +63,7 @@ public class PatientService : IPatientService
 
         var model = _mapper.Map<Core.Models.Patient>(patient);
 
-        await _patientRepository.UpdateAsync(id, model);
+        await _patientRepository.UpdateAsync(model);
     }
 
     public async Task DeleteAsync(Guid id)
