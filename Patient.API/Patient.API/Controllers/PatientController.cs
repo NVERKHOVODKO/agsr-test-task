@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Patient.Core.DTOs;
+using Patient.Core.Enums;
 using Patient.Core.Services.Interfaces;
 
 namespace Patient.API.Controllers;
@@ -28,7 +29,7 @@ public class PatientsController : ControllerBase
     /// </summary>
     /// <returns>A list of all patients.</returns>
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GetPatientDto>>> GetAll()
+    public async Task<ActionResult<IEnumerable<GetPatientDto>>> Get()
     {
         var patients = await _patientService.GetAllAsync();
         return Ok(patients);
@@ -40,10 +41,10 @@ public class PatientsController : ControllerBase
     /// <param name="id">The unique identifier of the patient.</param>
     /// <returns>The patient record if found; otherwise, returns NotFound.</returns>
     [HttpGet("{id}")]
-    public async Task<ActionResult<GetPatientDto>> Get(Guid id)
+    public async Task<ActionResult<GetPatientDto>> Find(Guid id)
     {
         var patient = await _patientService.GetByIdAsync(id);
-        return patient is null ? NotFound() : Ok(patient);
+        return patient is null ? Problem(statusCode: StatusCodes.Status404NotFound, detail: "Patient not found") : Ok(patient);
     }
 
     /// <summary>
@@ -53,10 +54,15 @@ public class PatientsController : ControllerBase
     /// <param name="patient">The updated patient data.</param>
     /// <returns>Ok if the update was successful.</returns>
     [HttpPut("{id}")]
-    public async Task<IActionResult> Put(Guid id, UpdatePatientDto patient)
+    public async Task<IActionResult> Update(Guid id, UpdatePatientDto patient)
     {
-        await _patientService.UpdateAsync(id, patient);
-        return Ok();
+        var result = await _patientService.UpdateAsync(id, patient);
+        return result switch
+        {
+            Status.Success => Ok(),
+            Status.NotFound => Problem(statusCode: StatusCodes.Status404NotFound, detail: "Patient not found"),
+            _ => Ok(result)
+        };
     }
 
     /// <summary>
@@ -65,7 +71,7 @@ public class PatientsController : ControllerBase
     /// <param name="patient">The patient data to create.</param>
     /// <returns>The newly created patient record.</returns>
     [HttpPost]
-    public async Task<ActionResult<GetPatientDto>> Post(CreatePatientDto patient)
+    public async Task<ActionResult<GetPatientDto>> Create(CreatePatientDto patient)
     {
         var createdPatient = await _patientService.CreateAsync(patient);
         return Ok(createdPatient);
@@ -98,8 +104,8 @@ public class PatientsController : ControllerBase
     /// <br/>- ap = approximately
     /// </param>
     /// <returns>List of patients matching the date criteria</returns>
-    [HttpGet("search")]
-    public async Task<ActionResult<IEnumerable<GetPatientDto>>> SearchByBirthDate([FromQuery] string date)
+    [HttpGet("[action]")]
+    public async Task<ActionResult<IEnumerable<GetPatientDto>>> Search([FromQuery] string date)
     {
         var patients = await _patientService.SearchByBirthDateAsync(date);
         return Ok(patients);

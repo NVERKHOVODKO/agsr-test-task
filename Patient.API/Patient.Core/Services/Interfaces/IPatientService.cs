@@ -1,4 +1,5 @@
 using Patient.Core.DTOs;
+using Patient.Core.Enums;
 
 namespace Patient.Core.Services.Interfaces;
 
@@ -10,7 +11,7 @@ public interface IPatientService
 
     Task<GetPatientDto> CreateAsync(CreatePatientDto patient);
 
-    Task UpdateAsync(Guid id, UpdatePatientDto patient);
+    Task<Status> UpdateAsync(Guid id, UpdatePatientDto patient);
 
     Task DeleteAsync(Guid id);
 

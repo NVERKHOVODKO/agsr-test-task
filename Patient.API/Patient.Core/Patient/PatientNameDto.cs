@@ -11,14 +11,14 @@ public class PatientNameDto
     /// Name usage type (e.g., official, maiden, nickname).
     /// </summary>
     [MaxLength(50)]
-    public string? Use { get; set; }
+    public string Use { get; set; } = string.Empty;
 
     /// <summary>
     /// Family name (surname) of the patient.
     /// </summary>
     [Required]
     [MaxLength(100)]
-    public string? Family { get; set; }
+    public string Family { get; set; } = string.Empty;
 
     /// <summary>
     /// List of given names (first and middle names) for the patient.

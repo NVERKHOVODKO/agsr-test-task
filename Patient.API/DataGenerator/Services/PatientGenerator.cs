@@ -44,7 +44,7 @@ public class PatientGenerator
                 if (response.IsSuccessStatusCode)
                 {
                     successCount++;
-                    _logger.LogDebug("Created patient {PatientNumber}", i);
+                    _logger.LogInformation("Created patient {PatientNumber}", i);
                 }
                 else
                 {

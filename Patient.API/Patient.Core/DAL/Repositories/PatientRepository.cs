@@ -61,7 +61,7 @@ public class PatientRepository : IRepository<Models.Patient>
     {
         var query = _context.Patients.AsQueryable();
 
-        if (prefix == DateConstants.NotEqualPrefix)
+        if (prefix == DatePrefix.NotEqual)
         {
             if (startDate == endDate && startDate.HasValue)
                 query = query.Where(p => p.BirthDate !=  startDate.Value.Date);

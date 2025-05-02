@@ -1,7 +1,7 @@
 using AutoMapper;
 using Patient.Core.DTOs;
-using Patient.Core.Exceptions;
-using Patient.Core.Helpers.Interfaces;
+using Patient.Core.Enums;
+using Patient.Core.Helpers;
 using Patient.Core.Repositories.Interfaces;
 using Patient.Core.Services.Interfaces;
 
@@ -9,14 +9,14 @@ namespace Patient.Core.Services;
 
 public class PatientService : IPatientService
 {
-    private readonly IRepository<Models.Patient> _patientRepository;
+    private readonly IRepository<Core.Models.Patient> _patientRepository;
     private readonly IMapper _mapper;
-    private readonly IDataHelper _dataHelper;
+    private readonly DataHelper _dataHelper;
 
     public PatientService(
-        IRepository<Models.Patient> patientRepository, 
+        IRepository<Core.Models.Patient> patientRepository, 
         IMapper mapper,
-        IDataHelper dataHelper)
+        DataHelper dataHelper)
     {
         _patientRepository = patientRepository;
         _mapper = mapper;
@@ -38,39 +38,26 @@ public class PatientService : IPatientService
 
     public async Task<GetPatientDto> CreateAsync(CreatePatientDto patient)
     {
-        if (string.IsNullOrEmpty(patient.Name?.Family))
-            throw new BadRequestException("Family name is required.");
-
-        if (patient.BirthDate == default)
-            throw new BadRequestException("Birth date is required.");
-
         var model = _mapper.Map<Core.Models.Patient>(patient);
-        model.Id = Guid.NewGuid();
-        model.Name.Id = Guid.NewGuid();
-
         await _patientRepository.AddAsync(model);
 
         return _mapper.Map<GetPatientDto>(model);
     }
 
-    public async Task UpdateAsync(Guid id, UpdatePatientDto patient)
+    public async Task<Status> UpdateAsync(Guid id, UpdatePatientDto patient)
     {
-        if (id != patient.Id)
-            throw new BadRequestException("ID in URL does not match patient ID.");
+       if (!await IsExistsAsync(id))
+            return Status.NotFound;
 
-        if (!await IsExistsAsync(id))
-            throw new NotFoundException($"Patient with ID {id} not found.");
+       var model = _mapper.Map<Core.Models.Patient>(patient);
 
-        var model = _mapper.Map<Core.Models.Patient>(patient);
+       await _patientRepository.UpdateAsync(model);
 
-        await _patientRepository.UpdateAsync(model);
+       return Status.Success;
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        if (!await IsExistsAsync(id))
-            throw new NotFoundException($"Patient with ID {id} not found.");
-
         await _patientRepository.DeleteAsync(id);
     }
 
