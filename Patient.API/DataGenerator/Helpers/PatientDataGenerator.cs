@@ -1,3 +1,4 @@
+using DataGenerator.Data;
 using DataGenerator.Helpers.Interfaces;
 using DataGenerator.Models;
 using Patient.Core.DTOs;
