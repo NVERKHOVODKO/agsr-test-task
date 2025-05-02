@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+﻿using DataGenerator.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -10,26 +10,34 @@ internal static class Program
     {
         using var loggerFactory = LoggerFactory.Create(builder =>
         {
-            builder
-                .AddConsole()
+            builder.AddConsole()
                 .SetMinimumLevel(LogLevel.Information);
         });
 
-        var logger = loggerFactory.CreateLogger<PatientGenerator>();
-        
-        using var httpClient = new HttpClient();
-        httpClient.Timeout = TimeSpan.FromSeconds(30);
-        httpClient.DefaultRequestHeaders.Add("User-Agent", "PatientDataGenerator/1.0");
-        
         var configuration = new ConfigurationBuilder()
             .AddEnvironmentVariables()
             .AddCommandLine(args)
             .Build();
-        
-        var apiBaseUrl = configuration["ApiBaseUrl"] ?? "http://localhost:7272/api/patients";
 
-        var patientGenerator = new PatientGenerator(httpClient, logger, apiBaseUrl);
+        var apiBaseUrl = configuration["ApiBaseUrl"] ?? "http://localhost:7272/api/patients";
+        
+        using var httpClient = CreateHttpClient();
+        var patientGenerator = new PatientGenerator(
+            httpClient,
+            loggerFactory.CreateLogger<PatientGenerator>(),
+            new PatientDataGenerator(),
+            apiBaseUrl
+        );
 
         await patientGenerator.GeneratePatientsAsync();
+    }
+
+    private static HttpClient CreateHttpClient()
+    {
+        return new HttpClient
+        {
+            Timeout = TimeSpan.FromSeconds(30),
+            DefaultRequestHeaders = { { "User-Agent", "PatientDataGenerator/1.0" } }
+        };
     }
 }

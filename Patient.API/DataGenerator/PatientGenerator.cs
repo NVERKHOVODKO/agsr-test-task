@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using DataGenerator.Helpers;
 using Microsoft.Extensions.Logging;
 using Patient.Core.DTOs;
 using Patient.Core.Enums;
@@ -17,7 +18,8 @@ public class PatientGenerator
     private const double ActivePatientProbability = 0.8;
     private const int PatientCount = 100;
 
-    public PatientGenerator(HttpClient httpClient, ILogger<PatientGenerator> logger, string? apiBaseUrl)
+    public PatientGenerator(HttpClient httpClient, ILogger<PatientGenerator> logger,
+        PatientDataGenerator patientDataGenerator, string? apiBaseUrl)
     {
         _httpClient = httpClient;
         _logger = logger;
