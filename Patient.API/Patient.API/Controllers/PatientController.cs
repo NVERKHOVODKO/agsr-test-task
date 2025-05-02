@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Patient.Core.DTOs;
 using Patient.Core.Enums;
-using Patient.Core.Patient;
 using Patient.Core.Services.Interfaces;
 
 namespace Patient.API.Controllers;

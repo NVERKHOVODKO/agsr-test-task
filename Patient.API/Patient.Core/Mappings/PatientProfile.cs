@@ -1,6 +1,6 @@
 using AutoMapper;
 using Patient.Core.DAL.Models;
-using Patient.Core.Patient;
+using Patient.Core.DTOs;
 
 namespace Patient.Core.Mappings;
 

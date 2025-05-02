@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Patient.Core.Services.Patient.Enums;
 
-namespace Patient.Core.Patient;
+namespace Patient.Core.DTOs;
 
 /// <summary>
 /// Data transfer object for updating an existing patient record.

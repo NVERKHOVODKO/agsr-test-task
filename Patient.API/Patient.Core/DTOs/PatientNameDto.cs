@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Patient.Core.Patient;
+namespace Patient.Core.DTOs;
 
 /// <summary>
 /// Represents a patient's complete name information.

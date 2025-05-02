@@ -1,4 +1,4 @@
-using Patient.Core.Patient;
+using Patient.Core.DTOs;
 
 namespace DataGenerator.Helpers.Interfaces;
 

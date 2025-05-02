@@ -2,9 +2,9 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Patient.Core.Constants;
 using Patient.Core.DAL.Repositories.Interfaces;
+using Patient.Core.DTOs;
 using Patient.Core.Enums;
 using Patient.Core.Helpers;
-using Patient.Core.Patient;
 using Patient.Core.Services.Interfaces;
 
 namespace Patient.Core.Services;
