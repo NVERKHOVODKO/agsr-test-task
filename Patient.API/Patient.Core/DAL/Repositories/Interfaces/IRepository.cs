@@ -14,7 +14,7 @@ public interface IRepository<T> where T : BaseModel
 
     Task DeleteAsync(Guid id);
 
-    Task<bool> IsExists(Guid id);
+    IQueryable<Models.Patient> GetQueryable();
 
-    Task<List<Models.Patient>> SearchByBirthDateAsync(DateTime? startDate, DateTime? endDate, string prefix);
+    Task<bool> IsExists(Guid id);
 }

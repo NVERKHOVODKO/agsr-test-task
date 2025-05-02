@@ -1,4 +1,6 @@
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Patient.Core.Constants;
 using Patient.Core.DAL.Repositories.Interfaces;
 using Patient.Core.Enums;
 using Patient.Core.Helpers;
@@ -65,10 +67,23 @@ public class PatientService : IPatientService
     
     public async Task<IEnumerable<GetPatientDto>> SearchByBirthDateAsync(string dateParam)
     {
-        var (prefix, dateTime) = _dataHelper.ParseFhirDateParameter(dateParam);
-        var (startDate, endDate) = _dataHelper.CalculateDateRange(prefix, dateTime);
+        var parsedParam = _dataHelper.ParseFhirDateParameter(dateParam);
+        var date = _dataHelper.CalculateDateRange(parsedParam.Prefix, parsedParam.DateTime);
+
+        var query = _patientRepository.GetQueryable();
+            
+        if (date.Start == date.End && date.Start.HasValue && parsedParam.Prefix == DatePrefix.NotEqual)
+            query = query.Where(p => p.BirthDate != date.Start.Value.Date);
+        else
+        {
+            if (date.Start.HasValue)
+                query = query.Where(p => p.BirthDate >= date.Start.Value);
         
-        var patients = await _patientRepository.SearchByBirthDateAsync(startDate, endDate, prefix);
+            if (date.End.HasValue)
+                query = query.Where(p => p.BirthDate <= date.End.Value);
+        }
+        
+        var patients = await query.ToListAsync();
         
         return _mapper.Map<IEnumerable<GetPatientDto>>(patients);
     }

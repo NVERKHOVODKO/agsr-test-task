@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Patient.Core.Constants;
 using Patient.Core.DAL.Context;
 using Patient.Core.DAL.Repositories.Interfaces;
 
@@ -51,30 +50,7 @@ public class PatientRepository : IRepository<Models.Patient>
         await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> IsExists(Guid id)
-    {
-        return await _context.Patients.AnyAsync(p => p.Id == id);
-    }
-    
-    public async Task<List<Models.Patient>> SearchByBirthDateAsync(DateTime? startDate, DateTime? endDate,
-        string prefix)
-    {
-        var query = _context.Patients.AsQueryable();
+    public async Task<bool> IsExists(Guid id) => await _context.Patients.AnyAsync(p => p.Id == id);
 
-        if (prefix == DatePrefix.NotEqual)
-        {
-            if (startDate == endDate && startDate.HasValue)
-                query = query.Where(p => p.BirthDate !=  startDate.Value.Date);
-        }
-        else
-        {
-            if (startDate.HasValue)
-                query = query.Where(p => p.BirthDate >= startDate.Value);
-        
-            if (endDate.HasValue)
-                query = query.Where(p => p.BirthDate <= endDate.Value);
-        }
-        
-        return await query.ToListAsync();
-    }
+    public IQueryable<Models.Patient> GetQueryable() => _context.Patients.AsQueryable();
 }
