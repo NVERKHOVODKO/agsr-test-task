@@ -64,10 +64,6 @@ A Postman collection (`Patient API Demo.postman_collection.json`) is included in
 ## Database Migrations
 The system automatically applies EF Core migrations on startup when running in Development mode.
 
-## Health Checks
-- Endpoint: `GET /health`
-- Checks: Database connectivity
-
 ## Project Structure
 ```
 /Patient.API
