@@ -10,11 +10,11 @@ public class DataBaseContext : DbContext
     {
     }
 
-    public DbSet<Models.Patient?> Patients { get; set; } = null!;
+    public DbSet<Models.Patient> Patients { get; set; }
 
-    public DbSet<PatientName> PatientNames { get; set; } = null!;
+    public DbSet<PatientName> PatientNames { get; set; }
 
-    public DbSet<PatientGivenName> PatientGivenNames { get; set; } = null!;
+    public DbSet<PatientGivenName> PatientGivenNames { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
